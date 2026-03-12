@@ -1,0 +1,16 @@
+{
+    "patreon": {
+        "tierColName": "Tier",
+        "nameColName": "Patron",
+        "dateSubbedColName": "Patronage_Since_Date",
+        "grossColName": "Lifetime_Amount"
+        
+    },
+    "subscribestar": {
+        "tierColName": "tier title",
+        "nameColName": "SubscribeStar",
+        "dateSubbedColName": "subscribed",
+        "grossColName": "gross"
+    }
+
+}

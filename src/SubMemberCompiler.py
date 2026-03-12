@@ -2,7 +2,6 @@
 import pandas as pd
 from datetime import datetime, timedelta
 
-
 def compileSubs(csvFile, platform, tierColName, nameColName, dateSubbedColName, grossColName, min_days=0):
     df = pd.read_csv(csvFile, sep=None, engine='python')
     
@@ -57,31 +56,48 @@ def compileSubs(csvFile, platform, tierColName, nameColName, dateSubbedColName, 
         print("Available columns were:", df.columns.tolist())
         return pd.DataFrame()
 
-def combineTables(table1, table2):
-    frames = [f for f in [table1, table2] if not f.empty]
-    
-    if not frames:
-        print("No data to combine.")
-        return pd.DataFrame()
+def combineTables(tables : list):
+        """
+            Combines all tables and returns a single one
 
-    # Combine them vertically
-    mergedDF = pd.concat(frames, ignore_index=True)
+            Args:
+                tables: list of all dables to combine
+            
+            Returns:
+                a single pandas dataframe with all members from all tables
+        """
+        
+        if len(tables) == 0:
+            print("No data to combine.")
+            return pd.DataFrame()
+
+        mergedDF = pd.concat(tables, ignore_index=True)
+        print(f"Total Combined Members: {len(mergedDF)}")
+        return mergedDF
     
-    print(f"Total Combined Members: {len(mergedDF)}")
-    return mergedDF
 
 def extractCol(table, val):
+    """
+        Extracts a column from a DataFrame and returns it as a list
+
+        Args:
+            table: The pandas DataFrame to extract the column from
+            val: The name of the column to extract
+
+        Returns:
+            a list containing the values of the specified column
+    """
     column_list = table[val].tolist()
     return column_list
 
 def main():
-    subStarDF = compileSubs("substarmembers.csv", "S", 'original_tier_title', 'nickname', 'subscribed', 'gross', 15)
-    patreonDF = compileSubs("patreonmembers.csv", "P", 'tier', 'name', 'patronage_since_date', 'lifetime amount', 15)
+    subStarDF = compileSubs("substarmembers.csv", "S", 'original_tier_title', 'nickname', 'subscribed', 'gross', 30)
+    patreonDF = compileSubs("patreonmembers.csv", "P", 'tier', 'name', 'patronage_since_date', 'lifetime amount', 30)
     
     print("\nSubstar:\n",subStarDF)
     print("\nPatreon:\n",patreonDF)
     
-    totalDF = combineTables(subStarDF, patreonDF)
+    totalDF = combineTables([subStarDF, patreonDF])
     print("\nAll:\n", totalDF)
     
     print("\n"+"-"*50)
