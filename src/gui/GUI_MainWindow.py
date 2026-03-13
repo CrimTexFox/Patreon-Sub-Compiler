@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
 from PySide6.QtCore import QSize
 

@@ -1,0 +1,26 @@
+{
+    "default":{
+        "header": "d",
+        "nameColName": "username",
+        "tierColName": "tier",
+        "dateSubbedColName": "subbedSince",
+        "grossColName": "gross"
+    },
+    
+    "patreon": {
+        "header": "p",
+        "nameColName": "Name",
+        "tierColName": "Tier",
+        "dateSubbedColName": "Patronage_Since_Date",
+        "grossColName": "Lifetime_Amount"
+        
+    },
+    "subscribestar": {
+        "header": "s",
+        "nameColName": "nickname",
+        "tierColName": "tier_title",
+        "dateSubbedColName": "subscribed",
+        "grossColName": "gross"
+    }
+
+}
