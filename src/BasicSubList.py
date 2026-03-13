@@ -61,10 +61,11 @@ class BasicSubList:
         self.df = self.df[self.df[self.COL_SUBBEDDATE.upper()] <= thresholdDate]
 
         #return cut down table
-        newFrame = self.df[[self.definedTiers["tierTitle"], self.definedTiers["subbedSince"], self.definedTiers["lifetime"], *unpackedList]].copy()
+        newFrame = self.df[[self.definedTiers["userName"], self.definedTiers["tierTitle"], self.definedTiers["subbedSince"], self.definedTiers["lifetime"], *unpackedList]].copy()
         return newFrame
 
 
+    @staticmethod
     def combineTables(tables : list):
         """
             Combines all tables and returns a single one

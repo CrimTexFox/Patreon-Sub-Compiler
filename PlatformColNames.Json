@@ -1,5 +1,6 @@
 {
     "patreon": {
+        "userName": "Name",
         "tierColName": "Tier",
         "nameColName": "Patron",
         "dateSubbedColName": "Patronage_Since_Date",
@@ -7,6 +8,7 @@
         
     },
     "subscribestar": {
+        "userName": "name",
         "tierColName": "tier title",
         "nameColName": "SubscribeStar",
         "dateSubbedColName": "subscribed",
