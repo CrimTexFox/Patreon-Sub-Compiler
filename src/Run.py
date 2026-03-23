@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from BasicSubList import BasicSubList
 
-from gui.GUI_Practice import MainWindow
+from gui.GUI_MainWindow import MainWindow
 from PySide6.QtWidgets import QApplication
 
 def main():
@@ -11,8 +11,8 @@ def main():
 
     #get all tables
     allTables = []
-    allTables.append(patreonList.filterTable("Loyal Drones"))
-    allTables.append(substarList.filterTable("Loyal Drones"))
+    allTables.append(patreonList.filterTable("Loyal Drones", 30))
+    allTables.append(substarList.filterTable("Loyal Drones", 30))
 
     #generate a final table
     combinedTable = BasicSubList.combineTables(allTables)
