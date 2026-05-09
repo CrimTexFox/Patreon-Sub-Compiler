@@ -6,6 +6,7 @@ from PySide6.QtWidgets import QApplication
 
 def main():
     #create objects
+    
     patreonList = BasicSubList("patreonmembers.csv", platform="patreon")
     substarList = BasicSubList("substarmembers.csv", platform="subscribestar")
 
@@ -17,9 +18,11 @@ def main():
     #generate a final table
     combinedTable = BasicSubList.combineTables(allTables)
     combinedNameCol = BasicSubList.extractCol(combinedTable, "username")
+    
 
     # Create and run GUI with the data
     MainWindow.runApp(combinedNameCol)
+    #MainWindow.runApp()
     
 
 

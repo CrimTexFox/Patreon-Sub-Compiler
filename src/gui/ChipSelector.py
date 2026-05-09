@@ -120,6 +120,8 @@ class ChipSelector(QWidget):
     Clicking the dropdown arrow shows a menu of available options.
     The box grows vertically as more chips are added."""
     selectionChanged = Signal(list)
+    itemAdded = Signal(str)
+    itemRemoved = Signal(str)
 
     def __init__(self, options, parent=None):
         super().__init__(parent)
@@ -180,6 +182,7 @@ class ChipSelector(QWidget):
         chip.removed.connect(self._removeChip)
         self._chipLayout.addWidget(chip)
         self._updateSize()
+        self.itemAdded.emit(text)
         self.selectionChanged.emit(self._selected)
 
     def _removeChip(self, text):
@@ -189,6 +192,7 @@ class ChipSelector(QWidget):
         chip.deleteLater()
         self._selected.remove(text)
         self._updateSize()
+        self.itemRemoved.emit(text)
         self.selectionChanged.emit(self._selected)
 
     def _updateSize(self):

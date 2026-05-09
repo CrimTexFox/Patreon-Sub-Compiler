@@ -4,14 +4,18 @@ from PySide6.QtGui import QClipboard, QIcon, QAction
 from PySide6.QtWidgets import (QApplication, 
                                QMainWindow, 
                                QPushButton, 
-                               QGridLayout, 
+                               QGridLayout, QScrollArea, 
+                               QVBoxLayout,
                                QWidget, 
                                QTextEdit, 
                                QTabWidget,
                                QLabel)
 from gui.ChipSelector import ChipSelector
+from gui.PlatformWidget import platformWidget
+import json
 
 class MainWindow(QMainWindow):
+    H1LABEL_STYLE = "font-weight: bold; font-size: 18px; color:#969696; margin-bottom: 6px;"
     def __init__(self, w: int = 800, h: int = 600, title="app"):
         super().__init__()
         self.resize(w, h)
@@ -26,6 +30,9 @@ class MainWindow(QMainWindow):
         #all other essential widgets (predefined for later)
         self.outputTextBox = QTextEdit()
         self.tabs = QTabWidget()
+
+        #non GUI
+        self.platformDict = {}
 
         #ui
         self.setupUI()
@@ -55,21 +62,43 @@ class MainWindow(QMainWindow):
         fileMenu.addAction(actionClear)
 
     def setupInput(self):
+        scrollArea = QScrollArea()
         inputWidget = QWidget()
         inputLayout = QGridLayout(inputWidget)
+        scrollArea.setWidget(inputWidget)
+        scrollArea.setWidgetResizable(True)
 
         #website selector field
         websiteSelectWidget = QWidget()
         websiteSelectLayout = QGridLayout(websiteSelectWidget)
 
+        with open("data\PlatformColNames.Json") as file:
+            data = json.load(file)
+        platformNames = [name for name in data if name != "default"]
+
+        #platform selector
         primaryLabel = QLabel("Platforms")
-        self.websiteSelect = ChipSelector(["Patreon", "Substar", "Ko-fi"])
+        primaryLabel.setStyleSheet(self.H1LABEL_STYLE)
+        self.websiteSelect = ChipSelector(platformNames)
+        self.websiteSelect.itemAdded.connect(self.addPlatformWidget)
+        self.websiteSelect.itemRemoved.connect(self.removePlatformWidget)
         websiteSelectLayout.addWidget(primaryLabel, 0, 0)
         websiteSelectLayout.addWidget(self.websiteSelect, 1, 0)
         inputLayout.addWidget(websiteSelectWidget, 0, 0, Qt.AlignmentFlag.AlignTop)
 
+        #platform input area
+        platformStorageWidget = QWidget()
+        self.platformStorageLayout = QVBoxLayout(platformStorageWidget)
+        self.platformStorageLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.platformStorageLayout.setSpacing(10)
+        self.platformStorageLayout.setContentsMargins(10, 10, 10, 10)
+        secondaryLabel = QLabel("Platform Details")
+        secondaryLabel.setStyleSheet(self.H1LABEL_STYLE)
+        self.platformStorageLayout.addWidget(secondaryLabel)
+        inputLayout.addWidget(platformStorageWidget, 1, 0, Qt.AlignmentFlag.AlignTop)
+        inputLayout.setRowStretch(1, 1)
 
-        return inputWidget
+        return scrollArea
 
     def setupOutput(self):
         outputWidget = QWidget()
@@ -98,6 +127,22 @@ class MainWindow(QMainWindow):
     def clearEvent(self):
         """Custom event to clear all input and output fields"""
         self.updateText("")
+    
+    #Input Helpers
+    def addPlatformWidget(self, platformName):
+        """Adds a new platform widget to the input area when a platform is selected"""
+        widget = platformWidget(platformName)
+        self.platformStorageLayout.addWidget(widget)
+        self.platformDict[platformName] = widget
+
+    def removePlatformWidget(self, platformName):
+        """Removes the platform widget from the input area when a platform is deselected"""
+        allkeys = list(self.platformDict.keys())
+        if platformName in allkeys:
+            widget = self.platformDict[platformName]
+            widget.setParent(None)  # Detach from layout
+            widget.deleteLater()  # Properly remove the widget from the layout
+            del self.platformDict[platformName]
 
     #Output Helpers
     def updateText(self, newText : str = ""):
