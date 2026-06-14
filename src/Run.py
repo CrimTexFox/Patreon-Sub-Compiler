@@ -12,8 +12,8 @@ def main():
 
     #get all tables
     allTables = []
-    allTables.append(patreonList.filterTable("Loyal Drones", 30))
-    allTables.append(substarList.filterTable("Loyal Drones", 30))
+    allTables.append(patreonList.filterTable("Loyal Drones", 0))
+    allTables.append(substarList.filterTable("Loyal Drones", 0))
 
     #generate a final table
     combinedTable = BasicSubList.combineTables(allTables)

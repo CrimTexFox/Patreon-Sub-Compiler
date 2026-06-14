@@ -62,6 +62,16 @@ class BasicSubList:
         except Exception as e:
             print(f"Error: failed to isolate {subName}: {e}")
 
+        #Filter by active subscription status if the platform defines a status column
+        statusCol = self.definedTiers.get("subStateName", "").strip()
+        activeLabel = self.definedTiers.get("subStateActiveLabel", "").strip()
+        if statusCol and activeLabel:
+            statusColUpper = statusCol.upper().replace(' ', '_')
+            if statusColUpper in self.df.columns:
+                self.df = self.df[self.df[statusColUpper].str.strip().str.upper() == activeLabel.upper()]
+            else:
+                print(f"Warning: Status column '{statusCol}' not found in {self.csvFile}. Skipping active status filter.")
+
         #check if extra columns exist
         unpackedList = list(extraCols)
         for col in extraCols:

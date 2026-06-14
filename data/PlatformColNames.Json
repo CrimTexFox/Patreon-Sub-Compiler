@@ -4,7 +4,9 @@
         "nameColName": "username",
         "tierColName": "tier",
         "dateSubbedColName": "subbedSince",
-        "grossColName": "gross"
+        "grossColName": "gross",
+        "subStateName": "status",
+        "subStateActiveLabel": "active"
     },
     
     "patreon": {
@@ -12,7 +14,9 @@
         "nameColName": "Name",
         "tierColName": "Tier",
         "dateSubbedColName": "Patronage_Since_Date",
-        "grossColName": "Lifetime_Amount"
+        "grossColName": "Lifetime_Amount",
+        "subStateName": "Patron Status",
+        "subStateActiveLabel": "Active patron"
         
     },
     "subscribestar": {
@@ -20,7 +24,9 @@
         "nameColName": "nickname",
         "tierColName": "tier_title",
         "dateSubbedColName": "subscribed",
-        "grossColName": "gross"
+        "grossColName": "gross",
+        "subStateName": "",
+        "subStateActiveLabel": ""
     }
 
 }
