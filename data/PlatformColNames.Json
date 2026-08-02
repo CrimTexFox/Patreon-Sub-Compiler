@@ -1,6 +1,7 @@
 {
     "default":{
         "header": "d",
+        "name": "Default",
         "nameColName": "username",
         "tierColName": "tier",
         "dateSubbedColName": "subbedSince",
@@ -11,6 +12,7 @@
     
     "patreon": {
         "header": "p",
+        "name": "Patreon",
         "nameColName": "Name",
         "tierColName": "Tier",
         "dateSubbedColName": "Patronage_Since_Date",
@@ -21,6 +23,7 @@
     },
     "subscribestar": {
         "header": "s",
+        "name": "SubscribeStar",
         "nameColName": "nickname",
         "tierColName": "tier_title",
         "dateSubbedColName": "subscribed",

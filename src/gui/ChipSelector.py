@@ -123,10 +123,12 @@ class ChipSelector(QWidget):
     itemAdded = Signal(str)
     itemRemoved = Signal(str)
 
-    def __init__(self, options, parent=None):
+    def __init__(self, options=None, parent=None, placeholderText=""):
         super().__init__(parent)
-        self._allOptions = list(options)
+        self._allOptions = list(dict.fromkeys(options or []))
         self._selected = []
+        self._chips = {}
+        self._placeholderText = placeholderText
 
         # Main horizontal layout: chip area + dropdown button
         self._outerLayout = QHBoxLayout(self)
@@ -136,6 +138,10 @@ class ChipSelector(QWidget):
         # Chip flow area
         self._chipContainer = QWidget()
         self._chipLayout = FlowLayout(self._chipContainer, margin=2, hSpacing=4, vSpacing=4)
+        self._placeholderLabel = QLabel(placeholderText)
+        self._placeholderLabel.setStyleSheet("color: #969696; padding: 2px 4px;")
+        self._placeholderLabel.setVisible(bool(placeholderText))
+        self._chipLayout.addWidget(self._placeholderLabel)
         self._outerLayout.addWidget(self._chipContainer, 1)
 
         # Dropdown arrow label (visual only)
@@ -177,23 +183,60 @@ class ChipSelector(QWidget):
             self._selectOption(action.text())
 
     def _selectOption(self, text):
+        if text not in self._allOptions or text in self._selected:
+            return
         self._selected.append(text)
         chip = ChipWidget(text)
         chip.removed.connect(self._removeChip)
+        self._chips[text] = chip
         self._chipLayout.addWidget(chip)
+        self._updatePlaceholder()
         self._updateSize()
         self.itemAdded.emit(text)
-        self.selectionChanged.emit(self._selected)
+        self.selectionChanged.emit(self.selectedItems())
 
     def _removeChip(self, text):
-        chip = self.sender()
+        chip = self._chips.pop(text, None)
+        if chip is None:
+            return
         self._chipLayout.removeWidget(chip)
         chip.setParent(None)
         chip.deleteLater()
         self._selected.remove(text)
+        self._updatePlaceholder()
         self._updateSize()
         self.itemRemoved.emit(text)
-        self.selectionChanged.emit(self._selected)
+        self.selectionChanged.emit(self.selectedItems())
+
+    def _updatePlaceholder(self):
+        self._placeholderLabel.setVisible(bool(self._placeholderText) and not self._selected)
+
+    def setOptions(self, options, clearSelection=True):
+        """Replace the dropdown choices, optionally preserving valid selections."""
+        newOptions = list(dict.fromkeys(options))
+        if clearSelection:
+            self.clearSelection()
+        else:
+            for selected in list(self._selected):
+                if selected not in newOptions:
+                    self._removeChip(selected)
+        self._allOptions = newOptions
+
+    def clearSelection(self):
+        """Remove every selected chip and emit one consolidated change."""
+        removedItems = list(self._selected)
+        for text in removedItems:
+            chip = self._chips.pop(text)
+            self._chipLayout.removeWidget(chip)
+            chip.setParent(None)
+            chip.deleteLater()
+        self._selected.clear()
+        self._updatePlaceholder()
+        self._updateSize()
+        for text in removedItems:
+            self.itemRemoved.emit(text)
+        if removedItems:
+            self.selectionChanged.emit([])
 
     def _updateSize(self):
         """Recalculate height so the box grows/shrinks with chip count."""
