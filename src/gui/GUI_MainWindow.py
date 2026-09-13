@@ -19,10 +19,11 @@ from PySide6.QtWidgets import (QApplication,
                                QSizePolicy)
 from gui.ChipSelector import ChipSelector
 from gui.PlatformWidget import PLATFORM_CONFIG_PATH, platformWidget
+from resources import data_path
 
 class MainWindow(QMainWindow):
     H1LABEL_STYLE = "font-weight: bold; font-size: 18px; color:#969696; margin-bottom: 6px;"
-    def __init__(self, w: int = 800, h: int = 600, title="app"):
+    def __init__(self, w: int = 800, h: int = 600, title="Patreon Sub Compiler"):
         super().__init__()
         self.resize(w, h)
         self.setWindowTitle(title)
@@ -49,8 +50,8 @@ class MainWindow(QMainWindow):
         self.setupMenu()
 
         #setup tabs
-        self.tabs.addTab(self.setupInput(),QIcon("data/icons/inputHeader.png"), "General")
-        self.tabs.addTab(self.setupOutput(),QIcon("data/icons/outputHeader.png"), "Output")
+        self.tabs.addTab(self.setupInput(),QIcon(str(data_path("icons", "inputHeader.png"))), "General")
+        self.tabs.addTab(self.setupOutput(),QIcon(str(data_path("icons", "outputHeader.png"))), "Output")
 
         #add tab to central layout
         self.layout.addWidget(self.tabs, 0, 0, 1, 1)

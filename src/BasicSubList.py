@@ -2,10 +2,13 @@
 import json
 
 import pandas as pd
+from resources import data_path
 
 class BasicSubList:
 
-    def __init__(self, csvFile, platform="default", jsonFile="data\PlatformColNames.Json"):
+    def __init__(self, csvFile, platform="default", jsonFile=None):
+        if jsonFile is None:
+            jsonFile = data_path("PlatformColNames.Json")
         self.csvFile = csvFile
         self.df = pd.DataFrame()
         self.definedTiers : dict = self.preloadTierNames(platform, jsonFile)

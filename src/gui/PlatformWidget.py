@@ -28,12 +28,11 @@ from PySide6.QtWidgets import (
 )
 
 from gui.ChipSelector import ChipSelector
+from resources import data_path
 
 
-PLATFORM_CONFIG_PATH = (
-    Path(__file__).resolve().parents[2] / "data" / "PlatformColNames.Json"
-)
-FILE_ICON_PATH = Path(__file__).resolve().parents[2] / "data" / "icons" / "file.png"
+PLATFORM_CONFIG_PATH = data_path("PlatformColNames.Json")
+FILE_ICON_PATH = data_path("icons", "file.png")
 
 
 class FileChipWidget(QWidget):
